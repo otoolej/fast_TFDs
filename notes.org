@@ -1,0 +1,166 @@
+# (flyspell-mode nil)
+
+* BUGs [/]
+  + [ ] fix: tf=dtfd_sep2(sig,{N,'cosh',0.1},{make_odd(floor(N/3)),'hann'});
+    but when put in Ntime and Nfreq, its ok!
+
+* TODO INDICES
+  Change indices on ALL TIAF generators as m only needs to go from m=0,1,...Nh-1 and NOT
+  m=0,1,...,Nh as is now.  Thus, to from TIAF for positive lag need only:
+** CODE:
+   K=zeros(N,N+1);
+   m=0:Nh-1; 
+   for n=0:N-1
+      i1=mod(n+m,N2); i2=mod(n-m,N2); i3=mod(n+m+1,N2); 
+   
+      K(n+1,2.*m+1) = s1(i1+1).*conj(s1(i2+1));  % for m even
+      K(n+1,2.*m+2) = s1(i3+1).*conj(s1(i2+1));  % for m odd.
+   end
+
+
+* NOTES - using G1[l] in the DAF from the TIAF
+  To form the LI-kernel DTFD using the:
+  time--lag -> Doppler--lag -> time--lag ->  time--frequency 
+  approach. (assumes that Ntime is even.)
+
+  1. Let Nh=ceil(N/2); Nht=floor(Ntime/2); Qh=floor(Q/2); and O{Q}=-1 when Q is even
+     othewise O{Q}=0 when Q is odd.
+  2. From the TIAF Nx(N+1) Kdown[n,m];
+  3. IDFT to the Doppler--lag domain to get the Nx(N+1) AFdown[l,m]
+  4. Modulate for odd m values:
+
+     AFdown[l,2m+1] = AFdown[l,2m+1] exp(-j\pi/N l)
+
+     for l=0,1,...,N-1 and m=0,1,...,Nh-1;
+  5. Multiple by window G1[l]
+
+     SAFdown[l,m] = AFdown[l,m]G1[l],           0<=l<=Qh
+     SAFdown[Nht-l,m] = AFdown[N-l,m]G1[Q-l],   1<=l<=(Qh+O{Q})
+
+     over m=0,1,...,N;
+  6. De-modulate, but this time not that Nht replace N:
+     
+     SAFdown[l,2m+1] = SAFdown[l,2m+1] exp(-j\pi/Nht l)
+     
+     for l=0,1,...,Nht-1;
+  7. DFT back to the time--lag domain:
+
+     Rdown[n,m]=DFT{ SAFdown[l,m] }
+
+  8. Recover the negative lag values from the positive ones:
+     
+     Rdown[n,N-2m]=conj( Rdown[n,2m] ),        1<=m<=Nh-1
+     Rdown[n,N-1-2m]=conj( Rdown[n,2m+1] ),    0<=m<=Nh-1;
+
+  9. DFT to the time--domain.
+
+     p[2n,k] = DFT{ Rdown[n,2m] }
+     p[2n+1,k] = DFT{ Rdown[n,2m+1] }exp(-j\pi k/N);
+
+* NOTES - LI-kernel DTFD using the time--lag domain:
+  1. For even values of n:
+
+     p[2n,k] = W_C[2n,k] *_n g1[2n]
+
+     where g1[n] is length-2N and g1[2n+1]=0 because G1[l] is periodic in N
+  2. For odd-valued n samples:
+
+     p[2n+1,k] = W_C[2n+1,k] *_n g1_mod[2n]
+
+     where 
+     G1mod[l] = G[l] exp(-j\pi/N l) exp(j\pi/Nth l),   0<=l<=Qh,
+     G1mod[Q-l] = G[Q-l] exp(-j\pi(N-l)/N ) exp(j\pi(Nth-l)/Nth),   1<=l<=Qh+g,
+
+     where g=-1 if Q even, g=0 if Q odd.
+
+** Decimated LI-kernel:
+   is not same because:
+
+   p[2n,k] = W_C[2n,k] *_n g1[2n]
+   p[2n+1,k] = W_C[2n+1,k] *_n g1[2n]
+
+   i.e. no G1mod[l].
+
+
+
+* NOTES: Fast  AF-GDTFD Algorithm
+Assume:
+- that signal is 2N long (although not necessarly z[n]=0 for N<=n<=2N-1) .
+
+  1. Form the shift-down 2N x (2N+1) matrix K[n,m] 
+     
+     K[n,2m] = z[n+m]z^*[n-m]
+     K[n,2m+1] = z[n+m+1]z^*[n-m]
+     
+     for 0<=n<=2N-1 and 0<=m<=N-1 and
+     
+     K[n,N2] = z[n+N]z^*[n-N]
+
+     This computes positive lag values only for K.
+     
+  2. DFT to the DL domain :
+     
+     AF_q[l,m] = DFT{K[n,m]}
+
+     to get the 2N x (2N+1) DAF AF_q.
+
+  3. Modulate odd m values to componsate for nonuniform grid:
+     
+     AF_q[l,2m+1] = AF_q[l,2m+1] . \exp{-j*pi*l/N2}
+
+     for 0<=m<=N and 0<=l<=2N-1.
+
+  4. Periodically extend in the Doppler direction to 4N:
+     
+     AF[l+2N,2m] = AF[l,2m]   
+     AF[l+2N,2m+1] = -AF[l,2m+1]   
+     
+     for 0<=m<=N and 0<=l<=2N-1.  Thus, AF is 4N x (2N+1).
+
+  5. Multply by the (folded) AF-GDTFD kernel:
+     
+     SAF[l,m] = SAF[l,m] gAF[l,m]
+
+     for 0<=m<=2N and 0<=l<=4N-1.
+
+  6. Then, fold this SAF in the Doppler and lag directions:
+
+     SAF_fold[l,m] = SAF[l,m] + SAF[l-N2,m] + 
+                     SAF[l,m-N2] + SAF[l-N2,m-N2]
+
+     for 0<=m<=N and 0<=l<=2N-1.   Thus, SAF is 2N x (N+1).
+
+  7. IDFT to TL domain:
+
+     R[n,m] = IDFT{ SAF_fold[l,m] }
+
+  8. Recover negative lag values from positive ones:
+
+     R[n,2N-m] = R^*[n,m],  1<=m<=N-1
+
+  9. DFT to get AF-GDTFD:
+     
+     p[n,k] = DFT{ R[n,m] }
+    
+     where p[n,k] is 2N x 2N.
+
+
+** Computational load (DFTs)
+   + (2N+1) FFT-2N
+   + (N+1) FFT-2N
+   + N FFT-2N (because real-valued)
+
+   
+   + Total = 4N FFT-2N =  O( c8N^2 log2 2N )
+   + which is a reduction compared with the O'Hair/Suter method which is something like 
+      O( c12N^2 log2 2N ) because they don't make use of conjugate symmetry. 
+   + well, actually there algorithm is O( c3N^2 log2 N ) for N-point signal.
+      
+      
+      
+      
+
+
+* ToDo list 
+  + [X] why is load_paths_DTFD.m not working?
+
