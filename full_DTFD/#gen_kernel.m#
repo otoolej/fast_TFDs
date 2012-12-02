@@ -201,7 +201,6 @@ switch kernel_type
   %
   % G(nT,mT) = 1/|mT| h(n/|m|) or g(l/NT,mT)=H(lm/N)
   %---------------------------------------------------------------------
-
   case { 'prod', 'RID', 'product' }
     
     % oversample the window:

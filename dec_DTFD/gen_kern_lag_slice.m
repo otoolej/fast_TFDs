@@ -55,9 +55,11 @@
 %  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 %  DAMAGE.
 %-------------------------------------------------------------------------------
-function g=gen_kern_lag_slice( lag_slice, kernel_type, kernel_params, N )
+function g=gen_kern_lag_slice( lag_slice, kernel_type, kernel_params, N, G1 )
 DB=0;
 if(nargin<4) error('Need 3 input arguments.'); end
+if(nargin<5 || isempty(G1)) G1=[]; end
+
 N2=N*2;  
 
 lag_sample_rate=1;
@@ -67,7 +69,7 @@ g_lagslice=zeros(N,1);
 
 
 g=get_kern(g_lagslice,lag_slice,kernel_type,kernel_params, ...
-             doppler_sample_rate,lag_sample_rate,N2,N);
+             doppler_sample_rate,lag_sample_rate,N2,N,G1);
 
 
 
@@ -77,7 +79,7 @@ g=real(g);
 
 
 function g=get_kern(g,m,kernel_type,kernel_params,doppler_sample_rate, ...
-                      lag_sample_rate,N2,N)
+                      lag_sample_rate,N2,N,G1)
 Nd=size(g,1);
 d_hlf=floor(Nd/2);
 l=length(kernel_params);
@@ -120,6 +122,28 @@ switch kernel_type
       g(u+1) = exp( -const.*(u1.*m1).^2 ).';
       g(Nd-u+1)=g(u+1); 
   end
+  
+  %---------------------------------------------------------------------
+  % Product kernel (sometimes called a RID kernel)
+  %
+  % g(l/NT,mT)=H(lm/N)
+  %---------------------------------------------------------------------
+  case { 'prod', 'RID', 'product' }
+    
+    g(1) = 1;
+  
+    if(m==N)
+        g=0;
+    else
+        if(m>N) m=2*N-m; end
+
+        u=1:d_hlf;
+        im=mod(u*m,length(G1));
+        
+        g(u+1)=G1(im+1);
+        g(Nd-u+1)=g(u+1); 
+    end
+    
 
  otherwise
   error(['Unknown kernel type: ' kernel_type]);

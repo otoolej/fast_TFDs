@@ -104,6 +104,10 @@ Lh=ceil(L/2); Jh=ceil(J/2); J2=2*J;
 if(FAST_DTFD_DBvars) dispVars(N2,N,time_dec,freq_dec,L,Lh,J,J2,Jh); end
 
 
+% if product-kernel then generate window now:
+G1=get_prod_kernel(tfd_type,tfd_params,N,N2);
+
+
 %-------------------------------------------------------------------------
 % 3. Get TL kernel Kdown[n,m]
 %-------------------------------------------------------------------------
@@ -136,7 +140,7 @@ for m=0:Jh
   % Fold in the lag direction
   %------------------------------------
   for p=0:freq_dec-1
-      g=gen_kern_lag_slice( 2*(p*J+m),tfd_type,tfd_params,N);
+      g=gen_kern_lag_slice( 2*(p*J+m),tfd_type,tfd_params,N,G1);
       AFslice_EvenM = AFslice_EvenM + ...
           fft(getKslice_EvenM(z,n,p.*J+m,N2,N,Nh)) .* g;
   end
@@ -169,7 +173,7 @@ if(Lo>0)
     % Fold in the lag direction
     %------------------------------------
     for p=0:freq_dec-1
-        g=gen_kern_lag_slice(2*(p*J+m)+1,tfd_type,tfd_params,N);        
+        g=gen_kern_lag_slice(2*(p*J+m)+1,tfd_type,tfd_params,N,G1);        
         AFslice_OddM = AFslice_OddM + ...
             fft(getKslice_OddM(z,n,p.*J+m,N2,N,Nh)) .* g;
     end
@@ -217,6 +221,22 @@ tf=istfd_real(tf,z,'dec_dtfd_nonsep');
 
 
 
+function G1=get_prod_kernel(tfd_type,tfd_params,N,N2)
+%---------------------------------------------------------------------
+% Generate window for product-kernel
+%---------------------------------------------------------------------
+
+if( strcmp(tfd_type,'RID')==1 || strcmp(tfd_type,'prod')==1 || ...
+    strcmp(tfd_type,'product')==1 )
+    
+    % oversample the window:
+    L_dopp=N*N2;
+    
+    G1=get_Doppler_kernel(tfd_params,L_dopp,N2);
+    G1=real(G1);
+else
+    G1=[];
+end
 
 
 
