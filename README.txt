@@ -82,8 +82,8 @@ Algorithms for (Quadratic) Time-Frequency Distributions
         
 
 * Version and Date
-  + Version: 0.1
-  + Last update: [2011-05-23] 
+  + Version: 0.2
+  + Last update: [08-12-2012] 
 
 
 * Examples
@@ -185,8 +185,8 @@ Algorithms for (Quadratic) Time-Frequency Distributions
 
 * References
   [1] J.M. O' Toole and B. Boashash, "Fast and memory-efficient
-  algorithms for computing time--frequency distributions", IEEE
-  Trans. on Signal Processing, submitted for publication.
+  algorithms for computing time--frequency distributions", 
+  submitted for publication.
   
   [2] J.M. Oʼ Toole, M. Mesbah, and B. Boashash, “Improved discrete
   definition of quadratic time--frequency distributions,” IEEE
@@ -207,6 +207,6 @@ Algorithms for (Quadratic) Time-Frequency Distributions
    - DeustoTech, eLIFE group,
      University of Deusto,
      Avda. de las Universidades, 24
-     48007 Bilbao (Vizcaya), 
+     48007 Bilbao (Bizkaia), 
      Spain.
    - Email j.otoole@ieee.org	

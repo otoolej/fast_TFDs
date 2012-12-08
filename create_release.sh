@@ -9,8 +9,8 @@ fi
 
 RELEASE="$1";
 
-LONG_DIR='/home/otoolej/uqccr/work/software/discreteTFDs/dtfds_proposed';
-NEW_DIR=${LONG_DIR}/fastTFDs_releases/fastTFDs_v;
+LONG_DIR='/home/otoolej/deusto/software/fast_DTFDs/';
+NEW_DIR=${LONG_DIR}/releases/fastTFDs_v;
 NEW_DIR=${NEW_DIR}${RELEASE}
 
 

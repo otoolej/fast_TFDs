@@ -201,7 +201,6 @@ switch kernel_type
   %
   % G(nT,mT) = 1/|mT| h(n/|m|) or g(l/NT,mT)=H(lm/N)
   %---------------------------------------------------------------------
-
   case { 'prod', 'RID', 'product' }
     
     % oversample the window:
@@ -209,7 +208,6 @@ switch kernel_type
     
     G1=get_Doppler_kernel(kernel_params,L_dopp,2*N);
     G1=real(G1);
-    figure(9); clf; plot(G1);
     
     g(1,1:Nl)=1;
     g(1:Nd,1)=1;
@@ -225,7 +223,6 @@ switch kernel_type
         g(u + 1, Nl - m + 1) = g(u + 1, m + 1); 
         g(Nd - u + 1, Nl - m + 1) = g(u + 1, m + 1); 
     end
-    figure(10); clf; vtfd(fftshift(g));    
   
  otherwise
   error(['Unknown kernel type: ' kernel_type]);
