@@ -90,10 +90,19 @@ win_dft_param=0;
 if( l>=3 ) win_extra_param=win_params{3}; end
 if( l>3 )  win_dft_param=win_params{4}; end
 
+%---------------------------------------------------------------------
+% and/or if reversing the window (in time)
+%---------------------------------------------------------------------
+reverse=0;
+if(length(win_params)>5)
+  reverse=win_params{6};
+end
+
+
+
 Ph_floor=floor(P/2);
 Ph_ceil=ceil(P/2);
 if(FAST_DTFD_DB) dispVars(P,win_type,win_extra_param,win_dft_param); end
-
 
 
 g2=getWin(P,win_type,win_extra_param,win_dft_param);
@@ -153,11 +162,28 @@ if(N2freq>P && rem(P,2)==0 && P~=N2)
 end
 
 
+%---------------------------------------------------------------------
+% if normalizing window:
+%---------------------------------------------------------------------
+if(length(win_params)>4)
+  if(strcmpi(win_params{5},'y')==1)
+    g2=g2./sum(g2);
+  end
+end
+
+%---------------------------------------------------------------------
+% if (time) reversing window
+%---------------------------------------------------------------------
+if(reverse)
+  g2=shiftWin(g2);
+  g2_pad=shiftWin(g2_pad);
+end
 
 
 if( isreal_fn(fft(g2_pad))==0 )
   error('Window function G2(f) must be real valued.');
 end
+
 
 
 if(FAST_DTFD_DBplot)
@@ -168,6 +194,7 @@ if(FAST_DTFD_DBplot)
   title('lag-window g2[m]');
   dispEE(g2(1:Ph_floor+1),g2_pad(1:Ph_floor+1))
 end
+
 
 
 if(FAST_DTFD_DBvars) dispVars(P,Ph_floor,Nfreq,N2freq); end

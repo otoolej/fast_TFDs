@@ -1,6 +1,2 @@
-function y=make_odd(x)
-if(~rem(x,2))
-    y=x+1;
-else
-    y=x;
-end
+function x=make_odd(x)
+if(~mod(x,2)), x=x-1; end

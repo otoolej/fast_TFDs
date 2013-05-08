@@ -33,4 +33,5 @@ git tag "release_v$RELEASE"
 cp -R * ${NEW_DIR}/
 rm -f ${NEW_DIR}/notes.org
 rm -f ${NEW_DIR}/create_release.sh
+rm -f ${NEW_DIR}/ChangeLog.sh
 rm -rf ${NEW_DIR}/.git

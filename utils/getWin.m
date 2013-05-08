@@ -7,9 +7,11 @@
 % Returns vector with negative then positive indices of window
 %
 %--------------------------------------------------------------------------------
-function win = getWin( win_length, win_type, aux_param, freq_domain_rep )
-if( nargin<3 ) aux_param=[]; end
-if( nargin<4 ) freq_domain_rep=0; end
+function win = getWin( win_length, win_type, aux_param, freq_domain_rep, shift_win )
+if(nargin<3 || isempty(aux_param)), aux_param=[]; end
+if(nargin<4 || isempty(freq_domain_rep)), freq_domain_rep=0; end
+if(nargin<5 || isempty(shift_win)), shift_win=0; end
+
 DB=0;
 
 win_type=lower(win_type);
@@ -92,6 +94,9 @@ switch win_type
  otherwise
   error(['Unknown window type ' win_type]);
 end
+
+
+if(shift_win), win=shiftWin(win); end
 
 
 

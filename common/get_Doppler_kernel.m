@@ -107,7 +107,7 @@ if( win_param2==1 )
     
   if(Q>Nh_time)
     warning('Chopping down length of G1 to Nh_time');
-    Q=Nh_time;
+    Q=make_odd(Nh_time-1);
   end
   g1=getWin(Q,win_type,win_param);
 
