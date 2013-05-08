@@ -146,7 +146,7 @@ Algorithms for (Quadratic) Time-Frequency Distributions
   - operating system: Ubuntu GNU/Linux i686 distribution (Natty,
     11.04), with Linux kernel 2.6.38-8-generic
   - software: Octave 3.2.4 (using Gnuplot 4.4 patchlevel 2) and
-    Matlab 7.9.0 (R2009b)
+    Matlab (R2009b, R2012a, and R2013a)
 
 
 * Copyright
@@ -185,8 +185,9 @@ Algorithms for (Quadratic) Time-Frequency Distributions
 
 * References
   [1] J.M. O' Toole and B. Boashash, "Fast and memory-efficient
-  algorithms for computing time--frequency distributions", 
-  submitted for publication.
+  algorithms for computing quadratic time--frequency distributions", 
+  Applied and Computational Harmonic Analysis, Feb. 2013, 
+  doi:10.1016/j.acha.2013.01.003
   
   [2] J.M. Oʼ Toole, M. Mesbah, and B. Boashash, “Improved discrete
   definition of quadratic time--frequency distributions,” IEEE
