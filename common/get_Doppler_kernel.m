@@ -109,10 +109,9 @@ if( win_param2==1 )
     warning('Chopping down length of G1 to Nh_time');
     Q=make_odd(Nh_time-1);
   end
-  g1=getWin(Q,win_type,win_param);
 
-  time_doppler='doppler';
-  G1=shiftWin(g1);
+  time_doppler='doppler';  
+  G1=get_window(Q,win_type,win_param);
   G1pad=padWin(G1,Nh_time);
 
   
@@ -150,9 +149,7 @@ else
     Q=N;
   end
 
-  g1=getWin(Q,win_type,win_param);
-  g1=shiftWin(g1);
-  g1=padWin(g1,N);
+  g1=get_window(Q,win_type,win_param,0,N);
   G1_length=N;
 
 

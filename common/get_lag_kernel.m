@@ -105,13 +105,8 @@ Ph_ceil=ceil(P/2);
 if(FAST_DTFD_DB) dispVars(P,win_type,win_extra_param,win_dft_param); end
 
 
-g2=getWin(P,win_type,win_extra_param,win_dft_param);
+g2=get_window(P,win_type,win_extra_param,win_dft_param);
 g2=g2(:);
-
-%---------------------------------------------------------------------
-% Shift to appropriate indicies 
-%---------------------------------------------------------------------
-g2=shiftWin(g2);
 
 
 %---------------------------------------------------------------------

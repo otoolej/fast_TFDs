@@ -82,8 +82,8 @@ Algorithms for (Quadratic) Time-Frequency Distributions
         
 
 * Version and Date
-  + Version: 0.2
-  + Last update: [08-12-2012] 
+  + Version: 0.23
+  + Last update: [13-05-2013]
 
 
 * Examples

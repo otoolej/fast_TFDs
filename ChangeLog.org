@@ -2,6 +2,9 @@
 #
 # started: 23-Jan-2013
 
+* [2013-05-13 Mon]
+  + changed 'getWin' to 'get_window' function as was conflicting with TFSA package
+
 * [2013-05-08 Wed]
   + minor fixes to window functions in kernel
 
