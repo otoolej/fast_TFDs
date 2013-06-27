@@ -64,11 +64,11 @@ switch win_type
   win(wh+1)=1;
  case 'rect'
   win(1:win_length) = 1;
- case 'bart'
+ case {'bart', 'bartlett'}
   win = bartlett( win_length );
- case 'hamm'
+ case {'hamm', 'hamming'}
   win = hamming( win_length );
- case 'hann'
+ case {'hann', 'hanning'}
   win = hanning( win_length );
  case 'tukey'
   % NOTE: seems to be problem with Octave's (v2.9.12) tukeywin.m for N odd.
