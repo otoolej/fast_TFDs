@@ -2,6 +2,9 @@
 #
 # started: 23-Jan-2013
 
+* [2016-08-11 Thu] 
+  + replaced README.txt with README.md
+
 * [2013-05-13 Mon]
   + changed 'getWin' to 'get_window' function as was conflicting with TFSA package
 
