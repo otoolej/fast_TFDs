@@ -1,152 +1,158 @@
 Algorithms for (Quadratic) Time-Frequency Distributions
 =======================================================
 
-# Overview
-  This collection of M-files generate time-frequency distributions
-  (TFDs) with as few computations and as little memory as possible.
-  The algorithms are described in [1]; the discrete TFD definition
-  they compute is in [2].  
+This collection of M-files generate time-frequency distributions
+(TFDs) with as few computations and as little memory as possible.
+The algorithms are described in [[1]](#references); the discrete TFD definition
+they compute is in [[2]](#references).  
 
-  There are two sets of algorithms.  The first set (Set1) computes
-  the exact TFD and minimises on oversampling.  The second set (Set2)
-  computes a decimated TFD, and therefore is not exact but may be
-  useful for some applications.
+There are two sets of algorithms.  The first set (Set1) computes
+the exact TFD and minimises on oversampling.  The second set (Set2)
+computes a decimated TFD, and therefore is not exact but may be
+useful for some applications.
 
-  Each set computes four different types of kernels:
-  + nonseparable kernel
-  + separable kernel
-  + Doppler-independent kernel
-  + lag-independent kernel 
-    (see [1] for more details)
-    
-  The code is organised as follows:
-  + folder 'full_DTFD' contains the first set of algorithms (computes
-    exact TFDs)
-  + folder 'dec_DTFD' contains the second set of algorithms (computes
-    decimated TFDs)
-  + folder 'common' and 'utils' contain extra functions used by both
-    algorithm sets.
+Each set computes four different types of kernels:
+- nonseparable kernel
+- separable kernel
+- Doppler-independent kernel
+- lag-independent kernel 
+  (see [[1]](#references) for more details)
+  
+The code is organised as follows:
+- folder `full_DTFD` contains the first set of algorithms (computes
+  exact TFDs)
+- folder `dec_DTFD` contains the second set of algorithms (computes
+  decimated TFDs)
+- folder `common` and `utils` contain extra functions used by both
+  algorithm sets.
 
-  These programs should run in either Matlab (v7.9.0) or Octave
-  (v3.2.4)
+These programs should run in either Matlab (v7.9.0) or Octave
+(v3.2.4)
 
 
 ## Quick Start
-   To start, load the paths:
+To start, load the paths:
 
-   >> load_paths_DTFDs;
+```matlab
+>> load_paths_DTFDs;
+```
 
-   Next, generate a test signal:
+Next, generate a test signal:
 
-   >> N=128; x=gen_LFM(N,0.1,0.3);
+```matlab
+>> N=128; x=gen_LFM(N,0.1,0.3);
+```
 
-   Second, generate a TFD with a separable kernel:
+Second, generate a TFD with a separable kernel:
 
-   >> tf=dtfd_sep1(x,{51,'hamm',0,1},{171,'hann'},256,128); 
+```matlab
+>> tf=dtfd_sep1(x,{51,'hamm',0,1},{171,'hann'},256,128); 
+```
 
-   Third, plot the TFD:
+Third, plot the TFD:
 
-   >> vtfd(tf,x);
-
+```matlab
+>> vtfd(tf,x);
+```
 
 ## Description
 
-   1) functions to compute exact TFDs (in folder 'full_DTFD'):
-      + `dtfd_DI.m` computes a TFD with Doppler-independent kernel
-      + `dtfd_LI.m` computes a TFD with a lag-independent kernel
-      + `dtfd_nonsep.m` computes a nonseparable-kernel TFD
-      + `dtfd_sep1.m` computes a TFD with a separable kernel
-      + `dtfd_sep2.m` computes a TFD with a separable kernel using a
-        different algorithm to the `dtfd_sep1.m`
+1. functions to compute exact TFDs (in folder 'full_DTFD'):
+   - `dtfd_DI.m` computes a TFD with Doppler-independent kernel
+   - `dtfd_LI.m` computes a TFD with a lag-independent kernel
+   - `dtfd_nonsep.m` computes a nonseparable-kernel TFD
+   - `dtfd_sep1.m` computes a TFD with a separable kernel
+   - `dtfd_sep2.m` computes a TFD with a separable kernel using a
+     different algorithm to the `dtfd_sep1.m`
 
-   2) functions to compute a decimated TFD (in folder `dec_DTFD`)
-      + `dec_dtfd_DI.m` computes a decimated TFD with a
-        Doppler-independent kernel
-      + `dec_dtfd_LI.m` computes a decimated TFD with a
-        lag-independent kernel
-      + `dec_dtfd_nonsep.m` computes a decimated TFD with a
-        nonseparable kernel
-      + `dec_dtfd_sep.m` computes a decimated TFD with a separable kernel
-      + `dwvd_grid1.m` computes a decimated Wigner-Ville distribution
-      + `dwvd_grid2.m` computes a decimated Wigner-Ville distribution
-        with a different decimation grid to that grid in
-        `dwvd_grid1.m`
+2. functions to compute a decimated TFD (in folder `dec_DTFD`)
+   - `dec_dtfd_DI.m` computes a decimated TFD with a
+     Doppler-independent kernel
+   - `dec_dtfd_LI.m` computes a decimated TFD with a
+     lag-independent kernel
+   - `dec_dtfd_nonsep.m` computes a decimated TFD with a
+     nonseparable kernel
+   - `dec_dtfd_sep.m` computes a decimated TFD with a separable kernel
+   - `dwvd_grid1.m` computes a decimated Wigner-Ville distribution
+   - `dwvd_grid2.m` computes a decimated Wigner-Ville distribution
+     with a different decimation grid to that grid in
+     `dwvd_grid1.m`
 
-   3) Other miscellaneous functions (in folder `utils`) include:
-      + `get_analytic.m` computes a discrete analytic signal, as
-        defined in [3] 
-      + `gen_LFM.m` computes a linear frequency modulated (LFM) signal
-      + `fft_complex.m` is a function for alternative FFT routines
-        (for example to take advantage of parallel computing);
-        likewise are `fft_conj_summ.m`, `ifft_complex.m`, and `ifft_conj_symm.m`
+3. Other miscellaneous functions (in folder `utils`) include:
+   - `get_analytic.m` computes a discrete analytic signal, as
+     defined in [[3]](#references) 
+   - `gen_LFM.m` computes a linear frequency modulated (LFM) signal
+   - `fft_complex.m` is a function for alternative FFT routines
+     (for example to take advantage of parallel computing);
+     likewise are `fft_conj_summ.m`, `ifft_complex.m`, and `ifft_conj_symm.m`
         
 
 ## Version and Date
-  + Version: 0.23
-  + Last update: [13-05-2013]
+  - Version: 0.23
+  - Last update: [13-05-2013]
 
 
 # Examples
-  In all the examples, start by adding the paths by running the command
+In all the examples, start by adding the paths by running the command
 
-   ```matlab
-   >> load_paths_DTFDs;
-   ```
+ ```matlab
+ >> load_paths_DTFDs;
+ ```
 
-  1) Choi-Williams using the exact TFD algorithm (from Set1 [1]):
+1. Choi-Williams using the exact TFD algorithm (from Set1 [[1]](#references)):
 
-      ```matlab
-      % 1. generate test signal:
-      N=256; 
-      x=gen_LFM(N,0.05,0.15)+gen_LFM(N,0.2,0.35);
-      % 2. generate TFD
-      c=dtfd_nonsep(x,'cw',{30}); 
-      % 3. plot
-      clf; vtfd(c,x);
+    ```matlab
+    % 1. generate test signal:
+    N=256; 
+    x=gen_LFM(N,0.05,0.15)+gen_LFM(N,0.2,0.35);
+    % 2. generate TFD
+    c=dtfd_nonsep(x,'cw',{30}); 
+    % 3. plot
+    clf; vtfd(c,x);
 	  ```
 
-  2) Separable-kernel TFD using exact TFD algorithm (from Set1 [1])
-  
-	  ```matlab
-      % 1. generate test signal:
-      N=10000; 
-      x=gen_LFM(N,0.1,0.3)+gen_LFM(N,0.4,0.1);
-      % 2. generate TFD
-      Ntime=256; Nfreq=256;
-      c=dtfd_sep1(x,{51,'hamm',0,1},{271,'hann'},Ntime,Nfreq); 
-      % 3. plot
-      clf; vtfd(c,x);
-	  ```
-
-  3) Doppler-independent kernel TFD using decimated TFD algorithm
-     (from Set2 [1]) generating selective time portions of the
-     signal:
+2. Separable-kernel TFD using exact TFD algorithm (from Set1 [[1]](#references))
 
 	  ```matlab
-      % 1. generate test signal:
-      N=171; 
-      x=gen_LFM(N,0.1,0.4);
-      % 2. generate TFD:
-      Nfreq=258; 
-      time_dec=[20:3:160,191:250,255,256]; freq_dec=3;
-      tf=dec_dtfd_DI(x,{51,'hamm'},Nfreq,time_dec,freq_dec); 
-      % 3. plot
-      clf; vtfd(tf);
+    % 1. generate test signal:
+    N=10000; 
+    x=gen_LFM(N,0.1,0.3)+gen_LFM(N,0.4,0.1);
+    % 2. generate TFD
+    Ntime=256; Nfreq=256;
+    c=dtfd_sep1(x,{51,'hamm',0,1},{271,'hann'},Ntime,Nfreq); 
+    % 3. plot
+    clf; vtfd(c,x);
 	  ```
 
-  4) Separable kernel TFD using decimated TFD algorithm from Set2 [2]
+3. Doppler-independent kernel TFD using decimated TFD algorithm
+   (from Set2 [[1]](#references)) generating selective time portions of the
+   signal:
 
-      ```matlab
-      % 1. generate test signal:
-      N=10000; 
-      x=gen_LFM(N,0.1,0.3)+gen_LFM(N,0.4,0.1);
-      % 2. generate TFD:
-      Ntime=512; Nfreq=256;
-      time_dec=4; freq_dec=2;
-      c=dec_dtfd_sep(x,{51,'hamm',0,1},{271,'hann'}, ...
-                     Ntime,Nfreq,time_dec,freq_dec); 
-      % 3. plot
-      clf; vtfd(c,x);
+	  ```matlab
+    % 1. generate test signal:
+    N=171; 
+    x=gen_LFM(N,0.1,0.4);
+    % 2. generate TFD:
+    Nfreq=258; 
+    time_dec=[20:3:160,191:250,255,256]; freq_dec=3;
+    tf=dec_dtfd_DI(x,{51,'hamm'},Nfreq,time_dec,freq_dec); 
+    % 3. plot
+    clf; vtfd(tf);
+	  ```
+
+4. Separable kernel TFD using decimated TFD algorithm from Set2 [[2]](#references)
+
+    ```matlab
+    % 1. generate test signal:
+    N=10000; 
+    x=gen_LFM(N,0.1,0.3)+gen_LFM(N,0.4,0.1);
+    % 2. generate TFD:
+    Ntime=512; Nfreq=256;
+    time_dec=4; freq_dec=2;
+    c=dec_dtfd_sep(x,{51,'hamm',0,1},{271,'hann'}, ...
+                   Ntime,Nfreq,time_dec,freq_dec); 
+    % 3. plot
+    clf; vtfd(c,x);
 	  ```
 
 
